@@ -29,8 +29,10 @@ WORKDIR /var/www/html
 # Copiar todos los archivos del proyecto al contenedor
 COPY . .
 
-# Crear el archivo .env a partir del ejemplo
-RUN cp .env.example .env
+# Crear el archivo .env a partir del ejemplo y ajustar configuraciones críticas para Docker
+RUN cp .env.example .env && \
+    sed -i 's/LOG_CHANNEL=stack/LOG_CHANNEL=stderr/g' .env && \
+    sed -i 's/SESSION_DRIVER=database/SESSION_DRIVER=file/g' .env
 
 # Instalar dependencias de Laravel para producción
 RUN composer install --no-dev --optimize-autoloader
