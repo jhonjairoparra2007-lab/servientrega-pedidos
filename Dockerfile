@@ -29,8 +29,14 @@ WORKDIR /var/www/html
 # Copiar todos los archivos del proyecto al contenedor
 COPY . .
 
+# Crear el archivo .env a partir del ejemplo
+RUN cp .env.example .env
+
 # Instalar dependencias de Laravel para producción
 RUN composer install --no-dev --optimize-autoloader
+
+# Generar la clave de la aplicación (soluciona el Error 500 por APP_KEY faltante)
+RUN php artisan key:generate
 
 # Configurar permisos para que Laravel pueda escribir en storage y bootstrap/cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
