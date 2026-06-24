@@ -8,11 +8,8 @@ Route::get('/', function () {
     return redirect('/pedidos');
 });
 
-// Ruta para listar todos los pedidos
-Route::get('/pedidos', [PedidoController::class, 'index'])->name('pedidos.index');
-
-// Ruta para buscar un pedido por ID/guía
+// Ruta para buscar un pedido por ID/guía (Debe ir antes del resource para no chocar con show)
 Route::get('/pedidos/buscar', [PedidoController::class, 'buscar'])->name('pedidos.buscar');
 
-// Ruta para mostrar el detalle de un pedido específico
-Route::get('/pedidos/{id}', [PedidoController::class, 'show'])->name('pedidos.show');
+// Rutas CRUD automáticas para Pedidos (index, create, store, show, edit, update, destroy)
+Route::resource('pedidos', PedidoController::class);
