@@ -38,8 +38,12 @@ RUN composer install --no-dev --optimize-autoloader
 # Generar la clave de la aplicación (soluciona el Error 500 por APP_KEY faltante)
 RUN php artisan key:generate
 
+# Crear la base de datos SQLite por defecto y correr migraciones (soluciona error de sessions)
+RUN touch database/database.sqlite
+RUN php artisan migrate --force
+
 # Configurar permisos para que Laravel pueda escribir en storage y bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 # Exponer el puerto 80 (usado por Apache y Render por defecto)
 EXPOSE 80
